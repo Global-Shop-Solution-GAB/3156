@@ -1,0 +1,713 @@
+Program.Sub.ScreenSU.Start
+gui.F_PrtCertReq..create
+gui.F_PrtCertReq..caption("Mat Cert Packet")
+gui.F_PrtCertReq..size(4005,1950)
+gui.F_PrtCertReq..position(0,0)
+gui.F_PrtCertReq..alwaysontop(False)
+gui.F_PrtCertReq..fontname("Arial")
+gui.F_PrtCertReq..fontsize(8)
+gui.F_PrtCertReq..forecolor(0)
+gui.F_PrtCertReq..fontstyle(,,,,)
+gui.F_PrtCertReq..BackColor(-2147483633)
+gui.F_PrtCertReq..controlbox(False)
+gui.F_PrtCertReq..maxbutton(False)
+gui.F_PrtCertReq..minbutton(False)
+gui.F_PrtCertReq..mousepointer(0)
+gui.F_PrtCertReq..moveable(True)
+gui.F_PrtCertReq..sizeable(True)
+gui.F_PrtCertReq..ShowInTaskBar(True)
+gui.F_PrtCertReq..titlebar(True)
+gui.F_PrtCertReq.lblQ.create(label,"Do you want to open the Material Cert Packet?",True,3525,255,1,200,200,True,0,Arial,8,-2147483633,0)
+gui.F_PrtCertReq.lbl2.create(label,"Do you want to open the Material Cert Packet?",True,3525,255,1,200,200,True,0,Arial,8,-2147483633,0)
+gui.F_PrtCertReq.cmdYes.create(button)
+gui.F_PrtCertReq.cmdYes.caption("Yes")
+gui.F_PrtCertReq.cmdYes.visible(True)
+gui.F_PrtCertReq.cmdYes.size(930,375)
+gui.F_PrtCertReq.cmdYes.zorder(0)
+gui.F_PrtCertReq.cmdYes.position(585,650)
+gui.F_PrtCertReq.cmdYes.enabled(True)
+gui.F_PrtCertReq.cmdYes.fontname("Arial")
+gui.F_PrtCertReq.cmdYes.fontsize(8)
+gui.F_PrtCertReq.cmdYes.event(click,PrtCert2)
+gui.F_PrtCertReq.cmdNo.create(button)
+gui.F_PrtCertReq.cmdNo.caption("No")
+gui.F_PrtCertReq.cmdNo.visible(True)
+gui.F_PrtCertReq.cmdNo.size(855,375)
+gui.F_PrtCertReq.cmdNo.zorder(0)
+gui.F_PrtCertReq.cmdNo.position(2085,650)
+gui.F_PrtCertReq.cmdNo.enabled(True)
+gui.F_PrtCertReq.cmdNo.fontname("Arial")
+gui.F_PrtCertReq.cmdNo.fontsize(8)
+gui.F_PrtCertReq.cmdNo.event(click,cmdEnd)
+
+
+gui.F_PrtCertPrt..create
+gui.F_PrtCertPrt..caption("Print - Mat Cert Packet")
+gui.F_PrtCertPrt..size(4005,1620)
+gui.F_PrtCertPrt..position(0,0)
+gui.F_PrtCertPrt..event(unload,PrtCert2)
+gui.F_PrtCertPrt..alwaysontop(False)
+gui.F_PrtCertPrt..fontname("Arial")
+gui.F_PrtCertPrt..fontsize(8)
+gui.F_PrtCertPrt..forecolor(0)
+gui.F_PrtCertPrt..fontstyle(,,,,)
+gui.F_PrtCertPrt..BackColor(-2147483633)
+gui.F_PrtCertPrt..controlbox(False)
+gui.F_PrtCertPrt..maxbutton(True)
+gui.F_PrtCertPrt..minbutton(True)
+gui.F_PrtCertPrt..mousepointer(0)
+gui.F_PrtCertPrt..moveable(True)
+gui.F_PrtCertPrt..sizeable(True)
+gui.F_PrtCertPrt..ShowInTaskBar(True)
+gui.F_PrtCertPrt..titlebar(True)
+gui.F_PrtCertPrt.lblShipLbl1.create(label,"Do you want to print the Material Cert Packet?",True,3495,255,1,200,200,True,0,Arial,8,-2147483633,0)
+gui.F_PrtCertPrt.cmdPrtYes.create(button)
+gui.F_PrtCertPrt.cmdPrtYes.caption("Yes")
+gui.F_PrtCertPrt.cmdPrtYes.visible(True)
+gui.F_PrtCertPrt.cmdPrtYes.size(855,375)
+gui.F_PrtCertPrt.cmdPrtYes.zorder(0)
+gui.F_PrtCertPrt.cmdPrtYes.position(600,600)
+gui.F_PrtCertPrt.cmdPrtYes.enabled(True)
+gui.F_PrtCertPrt.cmdPrtYes.fontname("Arial")
+gui.F_PrtCertPrt.cmdPrtYes.fontsize(8)
+gui.F_PrtCertPrt.cmdPrtYes.event(click,PrtCert2prtSel)
+gui.F_PrtCertPrt.cmdPrtNo.create(button)
+gui.F_PrtCertPrt.cmdPrtNo.caption("No")
+gui.F_PrtCertPrt.cmdPrtNo.visible(True)
+gui.F_PrtCertPrt.cmdPrtNo.size(855,375)
+gui.F_PrtCertPrt.cmdPrtNo.zorder(0)
+gui.F_PrtCertPrt.cmdPrtNo.position(2000,605)
+gui.F_PrtCertPrt.cmdPrtNo.enabled(True)
+gui.F_PrtCertPrt.cmdPrtNo.fontname("Arial")
+gui.F_PrtCertPrt.cmdPrtNo.fontsize(8)
+gui.F_PrtCertPrt.cmdPrtNo.event(click,cmdEnd)
+
+
+Program.Sub.ScreenSU.End
+
+Program.Sub.Preflight.Start
+
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+'Dev RRC
+'09222010
+'orignal from GAB_PRT_CERT
+'Mod121611
+'Hook 25910 - Populate -OES099 SCREEN
+'Hook 28532 - Post Save - OES0FS Screen
+'Hook 25982 - Script 2 -  OES099 SCREEN
+'Hook 37800  - Print - SHP205S SCREEN
+
+
+V.Local.sSQL.Declare(String)
+V.Local.sLot.Declare(String)
+V.Local.sPath.Declare(String)
+V.Local.sFile.Declare(String)
+V.Local.sLinkID.Declare(String)
+V.Local.lLinkID.Declare(Long)
+V.Global.sOrder.Declare(String)
+V.Global.sOrderSuffix.Declare(String)
+V.Global.sSrchPL.Declare(String)
+V.Global.sSrchPL.Set(0)
+'------------------------Populate Hook 25910  OES099 SCREEN ------------------------------------------------------------------------
+F.Intrinsic.Control.If(V.Caller.Hook,=,"25910")
+	V.Passed.000205.Set("Mat Cert Pack")
+	F.Intrinsic.Control.End
+F.Intrinsic.Control.Endif
+
+'------------------------ Hook 28532  - Post Save - OES0FS SCREEN------------------------------------------------------------------------
+F.Intrinsic.Control.If(V.Caller.Hook,=,"28532")
+	V.Global.sOrder.Set(V.Passed.FIRST-ORDER)
+	V.Global.sOrderSuffix.Set(V.Passed.FIRST-SEQ)
+	F.Intrinsic.Control.If(V.Global.sOrder,=,"0000000")
+		F.Intrinsic.Control.End
+	F.Intrinsic.Control.EndIf
+	F.Intrinsic.Control.CallSub(Prtcert2req)
+F.Intrinsic.Control.EndIf
+
+'------------------------ Hook 25982  - Script 2 - OES0FS SCREEN------------------------------------------------------------------------
+F.Intrinsic.Control.If(V.Caller.Hook,=,"25982")
+	V.Global.sOrder.Set(V.Passed.000150)
+	F.Intrinsic.String.LPad(V.Global.sOrder,"0",7,V.Global.sOrder)
+	V.Global.sOrderSuffix.Set(V.Passed.000151)
+	F.Intrinsic.String.LPad(V.Global.sOrderSuffix,"0",4,V.Global.sOrderSuffix)
+	F.Intrinsic.Control.If(V.Global.sOrder,=,"0000000")
+		F.Intrinsic.Control.End
+	F.Intrinsic.Control.EndIf
+	F.Intrinsic.Control.CallSub(Prtcert2)
+F.Intrinsic.Control.EndIf
+
+'------------------------ Hook 37800  -Print - SHP205S SCREEN------------------------------------------------------------------------
+F.Intrinsic.Control.If(V.Caller.Hook,=,"37800")
+	V.Global.sOrder.Set(V.Passed.000150)
+	F.Intrinsic.String.LPad(V.Global.sOrder,"0",7,V.Global.sOrder)
+	V.Global.sOrderSuffix.Set(V.Passed.000151)
+	F.Intrinsic.String.LPad(V.Global.sOrderSuffix,"0",4,V.Global.sOrderSuffix)
+	F.Intrinsic.Control.If(V.Global.sOrder,=,"0000000")
+		F.Intrinsic.Control.End
+	F.Intrinsic.Control.EndIf
+	V.Global.sSrchPL.Set(1)
+	F.Intrinsic.Control.CallSub(Prtcert2prt)
+F.Intrinsic.Control.EndIf
+
+
+'F.Intrinsic.Control.End
+
+
+Program.Sub.Main.End
+
+Program.Sub.PrtCert2.Start
+V.Local.sSQL.Declare(String)
+V.Local.sSQL2.Declare(String)
+V.Local.sPart.Declare(String)
+V.Local.sLocation.Declare(String)
+V.Local.sLot.Declare(String)
+V.Local.sBin.Declare(String)
+V.Local.sHeat.Declare(String)
+V.Local.sSerial.Declare(String)
+V.Local.iID.Declare(Long)
+V.Local.iID.Set(1)
+V.Local.sPartC1.Declare(String)
+V.Local.sPartC2.Declare(String)
+V.Local.iCodeChk.Declare(Long)
+V.Local.iCodeChk2.Declare(Long)
+V.Local.iCodeChk.Set(0)
+
+F.odbc.Connection!conx0.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+F.Intrinsic.String.Concat("DELETE FROM GAB_3156_PRT_CERTLBHS WHERE TERMINAL='",V.Caller.Terminal,"'",V.Local.sSql)
+F.ODBC.Connection!conx0.Execute(V.Local.sSql)
+F.ODBC.Connection!conx0.Close
+
+F.ODBC.Connection!conx.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+'------------------------ Search on V_SHIPMENT_LINES View for Order and Suffix------------------------------------------------------------------------
+F.Intrinsic.String.Concat("Select PART, LOCATION from V_SHIPMENT_LINES Where ORDER_NO='",V.Global.sOrder,"' AND ORDER_SUFFIX='",V.Global.sOrderSuffix,"'",V.Local.sSQL)
+F.ODBC.Connection!conx.OpenRecordsetRO("rstShipLn",V.Local.sSQL)
+F.Intrinsic.Control.DoUntil(V.ODBC.conx!rstShipLn.EOF,=,"True")
+	V.Local.sPart.Set(V.ODBC.conx!rstShipLn.FieldVal!PART)
+	V.Local.sLocation.Set(V.ODBC.conx!rstShipLn.FieldVal!LOCATION)
+'------------------------ Search on ORDER_HIST_LOT View for Order and Suffix------------------------------------------------------------------------
+	F.ODBC.Connection!conx2.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+	F.Intrinsic.String.Concat("Select LOT,BIN,FILL_BIN,HEAT,SERIAL from ORDER_HIST_LOT Where ORDER_NO='",V.Global.sOrder,"' AND ORDER_SUFFIX='",V.Global.sOrderSuffix,"'",V.Local.sSQL)
+	F.ODBC.Connection!conx2.OpenRecordsetRO("rstOrdHistLot",V.Local.sSQL)
+	F.Intrinsic.Control.If(V.ODBC.conx2!rstOrdHistLot.EOF,=,"TRUE")
+		F.Intrinsic.UI.Msgbox("No records found.","Mat Cert Pack")
+		F.Intrinsic.Control.End
+	F.Intrinsic.Control.EndIf
+	V.Local.sLot.Set(V.ODBC.conx2!rstOrdHistLot.FieldVal!LOT)
+	V.Local.sBin.Set(V.ODBC.conx2!rstOrdHistLot.FieldVal!BIN)
+	F.Intrinsic.String.Concat(V.Local.sBin,V.ODBC.conx2!rstOrdHistLot.FieldVal!FILL_BIN,V.Local.sBin)
+	V.Local.sHeat.Set(V.ODBC.conx2!rstOrdHistLot.FieldVal!HEAT)
+	V.Local.sSerial.Set(V.ODBC.conx2!rstOrdHistLot.FieldVal!SERIAL)
+	F.ODBC.conx2!rstOrdHistLot.Close
+	F.ODBC.Connection!conx2.Close
+'------------------------ Search on V_ITEM_HISTORY View for Part, Location, Lot, Bin, Heat, Serial------------------------------------------------------------------------
+	F.ODBC.Connection!conx2.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+	F.Intrinsic.String.Concat("Select CODE_TRANSACTION,JOB,SUFFIX,SEQUENCE from V_ITEM_HISTORY Where PART='",V.Local.sPart,"' AND LOCATION='",V.Local.sLocation,"'",V.Local.sSQL)
+	F.Intrinsic.String.Concat(V.Local.sSQL," AND LOT='",V.Local.sLot,"' AND BIN='",V.Local.sBin,"' AND HEAT='",V.Local.sHEAT,"' AND SERIAL_NUMBER='",V.Local.sSerial,"'",V.Local.sSQL)
+	F.Intrinsic.String.Concat(V.Local.sSQL," AND (CODE_TRANSACTION='J52' OR CODE_TRANSACTION='J55' OR CODE_TRANSACTION='S52' OR CODE_TRANSACTION='C52' OR CODE_TRANSACTION='R10' OR CODE_TRANSACTION='R11')",V.Local.sSQL)
+	F.ODBC.Connection!conx2.OpenRecordsetRO("rstItmHis",V.Local.sSQL)
+	F.Intrinsic.Control.If(V.ODBC.conx2!rstItmHis.EOF,=,"FALSE")
+		F.Intrinsic.Control.DoUntil(V.ODBC.conx2!rstItmHis.EOF,=,"TRUE")
+			F.odbc.Connection!conx3.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+			F.Intrinsic.String.Concat("SELECT * FROM GAB_3156_PRT_CERTLBHS WHERE TERMINAL='",V.Caller.Terminal,"'",V.Local.sSql)
+			F.ODBC.Connection!conx3.OpenRecordsetRW("rstPrtTemp",V.Local.sSQL)
+			F.ODBC.conx3!rstPrtTemp.AddNew
+			F.ODBC.conx3!rstPrtTemp.Set!Terminal(V.Caller.Terminal)
+			F.ODBC.conx3!rstPrtTemp.Set!ID(V.Local.iID)
+			F.ODBC.conx3!rstPrtTemp.Set!PART(V.Local.sPart)
+			F.ODBC.conx3!rstPrtTemp.Set!LOCATION(V.Local.sLocation)
+			F.ODBC.conx3!rstPrtTemp.Set!LOT(V.Local.sLot)
+			F.ODBC.conx3!rstPrtTemp.Set!BIN(V.Local.sBin)
+			F.ODBC.conx3!rstPrtTemp.Set!HEAT(V.Local.sHeat)
+			F.ODBC.conx3!rstPrtTemp.Set!SERIAL(V.Local.sSerial)
+			F.ODBC.conx3!rstPrtTemp.Set!JOB(V.ODBC.conx2!rstItmHis.FieldVal!JOB)
+			F.ODBC.conx3!rstPrtTemp.Set!SUFFIX(V.ODBC.conx2!rstItmHis.FieldVal!SUFFIX)
+			F.ODBC.conx3!rstPrtTemp.Set!CODE_TRANSACTION(V.ODBC.conx2!rstItmHis.FieldVal!CODE_TRANSACTION)
+			F.ODBC.conx3!rstPrtTemp.Set!SEQUENCE(V.ODBC.conx2!rstItmHis.FieldVal!SEQUENCE)
+			F.ODBC.conx3!rstPrtTemp.Set!CHK("N")
+			F.ODBC.conx3!rstPrtTemp.Update
+			F.Intrinsic.Math.Add(V.Local.iID,1,V.Local.iID)
+			F.ODBC.Connection!conx3.Close
+			F.ODBC.conx2!rstItmHis.MoveNext
+		F.Intrinsic.Control.Loop
+	F.Intrinsic.Control.EndIf
+	F.ODBC.conx2!rstItmHis.Close
+	F.ODBC.Connection!conx2.Close
+
+
+'----------------------- Search on GAB_PRT_CERTLBHS ----
+
+		F.ODBC.Connection!conx2.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+	F.Intrinsic.Control.Do
+'		F.ODBC.Connection!conx2.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+
+		F.Intrinsic.String.Concat("Select * FROM GAB_3156_PRT_CERTLBHS WHERE CHK='N' AND TERMINAL='",V.Caller.Terminal,"'",V.Local.sSQL)
+		F.ODBC.Connection!conx2.OpenRecordsetRO("rstItmHisLoop",V.Local.sSQL)
+		F.Intrinsic.Control.If(V.ODBC.conx2!rstItmHisLoop.EOF,=,True)
+			F.Intrinsic.Control.ExitDo
+		F.Intrinsic.Control.EndIf
+
+		'----------------------- Check status of the Line used --------
+
+		F.ODBC.Connection!conx6.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+		F.Intrinsic.String.Concat("SELECT * FROM GAB_3156_PRT_CERTLBHS WHERE TERMINAL='",V.Caller.Terminal,"' AND ID='",V.ODBC.conx2!rstItmHisLoop.FieldVal!ID,"'",V.Local.sSql)
+		F.ODBC.Connection!conx6.OpenRecordsetRW("rstupdID",V.Local.sSQL)
+		F.ODBC.conx6!rstupdID.Set!CHK("Y")
+		F.ODBC.conx6!rstupdID.Update
+		F.ODBC.conx6!rstupdID.Close
+		F.ODBC.Connection!conx6.Close
+	
+		F.Intrinsic.Control.If(V.ODBC.conx2!rstItmHisLoop.FieldVal!SEQUENCE,>=,990000)
+			F.Intrinsic.Control.If(V.ODBC.conx2!rstItmHisLoop.FieldVal!CODE_TRANSACTION,=,"J52")
+				V.Local.iCodeChk.Set(1)
+			F.Intrinsic.Control.EndIf
+			F.Intrinsic.Control.If(V.ODBC.conx2!rstItmHisLoop.FieldVal!CODE_TRANSACTION,=,"S52")
+				V.Local.iCodeChk.Set(1)
+			F.Intrinsic.Control.EndIf
+			F.Intrinsic.Control.If(V.ODBC.conx2!rstItmHisLoop.FieldVal!CODE_TRANSACTION,=,"C52")
+				V.Local.iCodeChk.Set(1)
+			F.Intrinsic.Control.EndIf
+
+
+			F.Intrinsic.Control.If(V.Local.iCodeChk,=,1)
+				F.ODBC.Connection!conx3.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+				F.Intrinsic.String.Concat("Select * FROM V_ITEM_HISTORY WHERE JOB='",V.ODBC.conx2!rstItmHisLoop.FieldVal!JOB,"' AND SUFFIX='",V.ODBC.conx2!rstItmHisLoop.FieldVal!SUFFIX,"'",V.Local.sSQL2)
+				F.Intrinsic.String.Concat(V.Local.sSQL2," AND (CODE_TRANSACTION='J52' OR CODE_TRANSACTION='J55' OR CODE_TRANSACTION='S52' OR CODE_TRANSACTION='C52' OR CODE_TRANSACTION='R10' OR CODE_TRANSACTION='R11')",V.Local.sSQL2)
+				F.ODBC.Connection!conx3.OpenRecordsetRO("rstPrtTjobs",V.Local.sSQL2)
+				F.Intrinsic.Control.If(V.ODBC.conx3!rstPrtTjobs.EOF,=,"FALSE")
+					F.Intrinsic.Control.DoUntil(V.ODBC.conx3!rstPrtTjobs.EOF,=,"TRUE")
+						F.Intrinsic.String.Concat("Select * FROM GAB_3156_PRT_CERTLBHS WHERE TERMINAL='",V.Caller.Terminal,"' AND PART='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!PART,"' AND LOCATION='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!LOCATION,"'",V.Local.sSQL2)
+						F.Intrinsic.String.Concat(V.Local.sSQL2," AND LOT='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!LOT,"' AND BIN='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!BIN,"' AND HEAT='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!HEAT,"'",V.Local.sSQL2)
+						F.Intrinsic.String.Concat(V.Local.sSQL2," AND SERIAL='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!SERIAL_NUMBER,"' AND SEQUENCE='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!SEQUENCE,"'",V.Local.sSQL2)
+						F.Intrinsic.String.Concat(V.Local.sSQL2," AND JOB='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!JOB,"' AND SUFFIX='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!SUFFIX,"'",V.Local.sSQL2)
+						F.ODBC.Connection!conx4.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+						F.ODBC.Connection!conx4.OpenRecordsetRO("rstchk",V.Local.sSQL2)
+						F.Intrinsic.Control.If(V.ODBC.conx4!rstchk.BOF,=,"TRUE")
+							F.ODBC.Connection!conx5.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+							F.Intrinsic.String.Concat("SELECT * FROM GAB_3156_PRT_CERTLBHS WHERE TERMINAL='",V.Caller.Terminal,"'",V.Local.sSql)
+							F.ODBC.Connection!conx5.OpenRecordsetRW("rstPrtTTjobs",V.Local.sSQL)
+							F.ODBC.conx5!rstPrtTTjobs.AddNew
+							F.ODBC.conx5!rstPrtTTjobs.Set!Terminal(V.Caller.Terminal)
+							F.ODBC.conx5!rstPrtTTjobs.Set!ID(V.Local.iID)
+							F.ODBC.conx5!rstPrtTTjobs.Set!PART(V.ODBC.conx3!rstPrtTjobs.FieldVal!PART)
+							F.ODBC.conx5!rstPrtTTjobs.Set!LOCATION(V.ODBC.conx3!rstPrtTjobs.FieldVal!LOCATION)
+							F.ODBC.conx5!rstPrtTTjobs.Set!LOT(V.ODBC.conx3!rstPrtTjobs.FieldVal!LOT)
+							F.ODBC.conx5!rstPrtTTjobs.Set!BIN(V.ODBC.conx3!rstPrtTjobs.FieldVal!BIN)
+							F.ODBC.conx5!rstPrtTTjobs.Set!HEAT(V.ODBC.conx3!rstPrtTjobs.FieldVal!HEAT)
+							F.ODBC.conx5!rstPrtTTjobs.Set!SERIAL(V.ODBC.conx3!rstPrtTjobs.FieldVal!SERIAL_NUMBER)
+							F.ODBC.conx5!rstPrtTTjobs.Set!JOB(V.ODBC.conx3!rstPrtTjobs.FieldVal!JOB)
+							F.ODBC.conx5!rstPrtTTjobs.Set!SUFFIX(V.ODBC.conx3!rstPrtTjobs.FieldVal!SUFFIX)
+							F.ODBC.conx5!rstPrtTTjobs.Set!CODE_TRANSACTION(V.ODBC.conx3!rstPrtTjobs.FieldVal!CODE_TRANSACTION)
+							F.ODBC.conx5!rstPrtTTjobs.Set!SEQUENCE(V.ODBC.conx3!rstPrtTjobs.FieldVal!SEQUENCE)
+							F.ODBC.conx5!rstPrtTTjobs.Set!CHK("N")
+							F.Intrinsic.Math.Add(V.Local.iID,1,V.Local.iID)
+							F.ODBC.conx5!rstPrtTTjobs.Update
+							F.ODBC.Connection!conx5.Close
+						F.Intrinsic.Control.EndIf
+						F.ODBC.Connection!conx4.Close
+						F.ODBC.conx3!rstPrtTjobs.MoveNext
+					F.Intrinsic.Control.Loop
+				F.Intrinsic.Control.EndIf
+				F.ODBC.conx3!rstPrtTjobs.Close
+				F.ODBC.Connection!conx3.Close
+			F.Intrinsic.Control.EndIf
+
+'-----------------------------------------------------------------------------------------------------------------------------
+			V.Local.iCodeChk2.Set(0)
+			F.Intrinsic.Control.If(V.ODBC.conx2!rstItmHisLoop.FieldVal!CODE_TRANSACTION,=,"J55")
+				V.Local.iCodeChk2.Set(1)
+			F.Intrinsic.Control.EndIf
+			F.Intrinsic.Control.If(V.ODBC.conx2!rstItmHisLoop.FieldVal!CODE_TRANSACTION,=,"R10")
+				V.Local.iCodeChk2.Set(1)
+			F.Intrinsic.Control.EndIf
+			F.Intrinsic.Control.If(V.ODBC.conx2!rstItmHisLoop.FieldVal!CODE_TRANSACTION,=,"R11")
+				V.Local.iCodeChk2.Set(1)
+			F.Intrinsic.Control.EndIf
+			F.Intrinsic.Control.If(V.Local.iCodeChk2,=,1)
+				F.ODBC.Connection!conx3.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+				F.Intrinsic.String.Concat("Select * FROM V_ITEM_HISTORY WHERE PART='",V.ODBC.conx2!rstItmHisLoop.FieldValRTrim!PART,"' AND LOCATION='",V.ODBC.conx2!rstItmHisLoop.FieldValRTrim!LOCATION,"'",V.Local.sSQL2)
+				F.Intrinsic.String.Concat(V.Local.sSQL2," AND LOT='",V.ODBC.conx2!rstItmHisLoop.FieldValRTrim!LOT,"' AND BIN='",V.ODBC.conx2!rstItmHisLoop.FieldValRTrim!BIN,"'",V.Local.sSQL2)
+				F.Intrinsic.String.Concat(V.Local.sSQL2," AND HEAT='",V.ODBC.conx2!rstItmHisLoop.FieldValRTrim!HEAT,"' AND SERIAL_NUMBER='",V.ODBC.conx2!rstItmHisLoop.FieldValRTrim!SERIAL,"'",V.Local.sSQL2)
+				F.ODBC.Connection!conx3.OpenRecordsetRO("rstPrtTjobs",V.Local.sSQL2)
+				F.Intrinsic.Control.If(V.ODBC.conx3!rstPrtTjobs.EOF,=,"FALSE")
+					F.Intrinsic.Control.DoUntil(V.ODBC.conx3!rstPrtTjobs.EOF,=,"TRUE")
+						F.Intrinsic.String.Concat("Select * FROM GAB_PRT_3156_CERTLBHS WHERE TERMINAL='",V.Caller.Terminal,"' AND PART='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!PART,"' AND LOCATION='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!LOCATION,"'",V.Local.sSQL2)
+						F.Intrinsic.String.Concat(V.Local.sSQL2," AND LOT='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!LOT,"' AND BIN='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!BIN,"' AND HEAT='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!HEAT,"'",V.Local.sSQL2)
+						F.Intrinsic.String.Concat(V.Local.sSQL2," AND SERIAL='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!SERIAL_NUMBER,"' AND SEQUENCE='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!SEQUENCE,"'",V.Local.sSQL2)
+						F.Intrinsic.String.Concat(V.Local.sSQL2," AND JOB='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!JOB,"' AND SUFFIX='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!SUFFIX,"'",V.Local.sSQL2)
+						F.ODBC.Connection!conx4.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+						F.ODBC.Connection!conx4.OpenRecordsetRO("rstchk",V.Local.sSQL2)
+						F.Intrinsic.Control.If(V.ODBC.conx4!rstchk.BOF,=,"TRUE")
+							F.ODBC.Connection!conx5.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+							F.Intrinsic.String.Concat("SELECT * FROM GAB_3156_PRT_CERTLBHS WHERE TERMINAL='",V.Caller.Terminal,"'",V.Local.sSql)
+							F.ODBC.Connection!conx5.OpenRecordsetRW("rstPrtTTjobs",V.Local.sSQL)
+							F.ODBC.conx5!rstPrtTTjobs.AddNew
+							F.ODBC.conx5!rstPrtTTjobs.Set!Terminal(V.Caller.Terminal)
+							F.ODBC.conx5!rstPrtTTjobs.Set!ID(V.Local.iID)
+							F.ODBC.conx5!rstPrtTTjobs.Set!PART(V.ODBC.conx3!rstPrtTjobs.FieldVal!PART)
+							F.ODBC.conx5!rstPrtTTjobs.Set!LOCATION(V.ODBC.conx3!rstPrtTjobs.FieldVal!LOCATION)
+							F.ODBC.conx5!rstPrtTTjobs.Set!LOT(V.ODBC.conx3!rstPrtTjobs.FieldVal!LOT)
+							F.ODBC.conx5!rstPrtTTjobs.Set!BIN(V.ODBC.conx3!rstPrtTjobs.FieldVal!BIN)
+							F.ODBC.conx5!rstPrtTTjobs.Set!HEAT(V.ODBC.conx3!rstPrtTjobs.FieldVal!HEAT)
+							F.ODBC.conx5!rstPrtTTjobs.Set!SERIAL(V.ODBC.conx3!rstPrtTjobs.FieldVal!SERIAL_NUMBER)
+							F.ODBC.conx5!rstPrtTTjobs.Set!JOB(V.ODBC.conx3!rstPrtTjobs.FieldVal!JOB)
+							F.ODBC.conx5!rstPrtTTjobs.Set!SUFFIX(V.ODBC.conx3!rstPrtTjobs.FieldVal!SUFFIX)
+							F.ODBC.conx5!rstPrtTTjobs.Set!CODE_TRANSACTION(V.ODBC.conx3!rstPrtTjobs.FieldVal!CODE_TRANSACTION)
+							F.ODBC.conx5!rstPrtTTjobs.Set!SEQUENCE(V.ODBC.conx3!rstPrtTjobs.FieldVal!SEQUENCE)
+							F.ODBC.conx5!rstPrtTTjobs.Set!CHK("N")
+							F.Intrinsic.Math.Add(V.Local.iID,1,V.Local.iID)
+							F.ODBC.conx5!rstPrtTTjobs.Update
+							F.ODBC.Connection!conx5.Close
+						F.Intrinsic.Control.EndIf
+						F.ODBC.Connection!conx4.Close
+						F.ODBC.conx3!rstPrtTjobs.MoveNext
+					F.Intrinsic.Control.Loop
+				F.Intrinsic.Control.EndIf
+				F.ODBC.conx3!rstPrtTjobs.Close
+				F.ODBC.Connection!conx3.Close
+			F.Intrinsic.Control.EndIf
+'--------------------------------------------------------------------------------------------------------------------------
+
+		F.Intrinsic.Control.EndIf
+		F.ODBC.conx2!rstItmHisLoop.Close
+'		F.ODBC.Connection!conx2.Close
+	F.Intrinsic.Control.Loop
+		F.ODBC.Connection!conx2.Close
+
+	F.ODBC.conx!rstShipLn.MoveNext
+F.Intrinsic.Control.Loop
+F.ODBC.conx!rstShipLn.Close
+F.ODBC.Connection!conx.Close
+
+F.Intrinsic.Control.CallSub(Prtcert2imp)
+
+
+
+
+Program.Sub.PrtCert2.End
+
+Program.Sub.PrtCert2Imp.Start
+V.Local.sSql.Declare(String)
+V.Local.sPath.Declare(String)
+V.Local.sFile.Declare(String)
+V.Local.sLinkID.Declare(String)
+V.Local.lLinkID.Declare(Long)
+V.Local.sPart.Declare(String)
+V.Local.sLoc.Declare(String)
+V.Local.sLot.Declare(String)
+V.Local.sBIN.Declare(String)
+V.Local.sHeat.Declare(String)
+V.Local.sSerial.Declare(String)
+V.Local.sIDlink.Declare(String)
+
+
+'------------------------ Search on V_ITEM_HISTORY View for Order and Suffix------------------------------------------------------------------------
+	F.ODBC.Connection!conx.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+	F.Intrinsic.String.Concat("Select * from GAB_3156_PRT_CERTLBHS Where TERMINAL='",V.Caller.Terminal,"'",V.Local.sSql)
+	F.ODBC.Connection!conx.OpenRecordsetRO("rstItemLot",V.Local.sSQL)
+	F.Intrinsic.Control.If(V.ODBC.conx!rstItemLot.EOF,=,"True")
+		F.Intrinsic.UI.Msgbox("No records found.","Mat Cert Pack")
+		F.Intrinsic.Control.End
+	F.Intrinsic.Control.EndIf
+	F.Intrinsic.Control.DoUntil(V.ODBC.conx!rstItemLot.EOF,=,"True")
+		F.Intrinsic.Control.If(V.ODBC.conx!rstItemLot.FieldVal!SEQUENCE,<,990000)
+			F.Intrinsic.String.RPad(V.ODBC.conx!rstItemLot.FieldValRTrim!PART," ",20,V.Local.sPart)
+			F.Intrinsic.String.RPad(V.ODBC.conx!rstItemLot.FieldValRTrim!LOCATION," ",2,V.Local.sLoc)
+			F.Intrinsic.String.RPad(V.ODBC.conx!rstItemLot.FieldValRTrim!LOT," ",15,V.Local.sLot)
+			F.Intrinsic.String.RPad(V.ODBC.conx!rstItemLot.FieldValRTrim!BIN," ",6,V.Local.sBin)
+			F.Intrinsic.String.RPad(V.ODBC.conx!rstItemLot.FieldValRTrim!HEAT," ",15,V.Local.sHEAT)
+			F.Intrinsic.String.RPad(V.ODBC.conx!rstItemLot.FieldValRTrim!SERIAL," ",30,V.Local.sSerial)
+			F.Intrinsic.String.Concat(V.Local.sPart,V.Local.sLoc,V.Local.sLot,V.Local.sBIN,V.Local.sHeat,V.Local.sSerial,V.Local.sIDlink)
+'------------------------ Search on V_LINK_DATA View for LINK_ID------------------------------------------------------------------------
+			F.Intrinsic.String.Concat("Select LINK_ID from V_LINK_DATA Where TYPE='00031' AND ID='",V.Local.sIDlink,"'",V.Local.sSQL)
+			F.ODBC.Connection!conx.OpenRecordsetRO("rstItemLink",V.Local.sSQL)
+			F.Intrinsic.Control.DoUntil(V.ODBC.conx!rstItemLink.EOF,=,"True")
+				V.Local.sLinkID.Set(V.ODBC.conx!rstItemLink.FieldVal!LINK_ID)
+				F.Intrinsic.Math.ConvertToLong(V.Local.sLinkID,V.Local.lLinkID)
+'------------------------ Search on ATG_DOC_ASSOC Table  for PATH and FILE ------------------------------------------------------------------------
+					F.Intrinsic.String.Concat("Select PATH,FILE from ATG_DOC_ASSOC Where LINK_ID='",V.Local.lLinkID,"'",V.Local.sSQL)
+					F.ODBC.Connection!conx.OpenRecordsetRO("rstLFile",V.Local.sSQL)
+					F.Intrinsic.Control.DoUntil(V.ODBC.conx!rstLFile.EOF,=,"True")
+						F.Intrinsic.String.Trim(V.ODBC.conx!rstLFile.FieldVal!PATH,V.Local.sPath)
+						F.Intrinsic.String.Trim(V.ODBC.conx!rstLFile.FieldVal!File,V.Local.sFile)
+						F.Intrinsic.String.Concat(V.Local.sPath,V.Local.sFile,V.Local.sFile)
+'------------------------ Open Linked file-----------------------------------------------------------------------
+						F.Intrinsic.task.ShellExec(V.Caller.Handle,"OPEN",V.local.sFile,"","",5)
+						F.ODBC.conx!rstLFile.MoveNext
+					F.Intrinsic.Control.Loop
+					F.ODBC.conx!rstLFile.Close
+				F.ODBC.conx!rstItemLink.MoveNext
+			F.Intrinsic.Control.Loop
+			F.ODBC.conx!rstItemLink.Close
+		F.Intrinsic.Control.EndIf
+		F.ODBC.conx!rstItemLot.MoveNext
+	F.Intrinsic.Control.Loop
+	F.ODBC.conx!rstItemLot.Close
+	F.ODBC.Connection!conx.Close
+F.Intrinsic.Control.End
+
+
+Program.Sub.PrtCert2Imp.End
+
+Program.Sub.PrtCert2Req.Start
+Gui.F_PrtCertReq..Show
+
+Program.Sub.PrtCert2Req.End
+
+Program.Sub.cmdEnd.Start
+F.Intrinsic.Control.End
+
+Program.Sub.cmdEnd.End
+
+Program.Sub.PrtCert2prt.Start
+Gui.F_PrtCertPrt..Show
+
+Program.Sub.PrtCert2prt.End
+
+Program.Sub.PrtCert2PL.Start
+'PrtCert2  for Packing List
+V.Local.sSQL.Declare(String)
+V.Local.sSQL2.Declare(String)
+V.Local.sPart.Declare(String)
+V.Local.sLocation.Declare(String)
+V.Local.sLot.Declare(String)
+V.Local.sBin.Declare(String)
+V.Local.sHeat.Declare(String)
+V.Local.sSerial.Declare(String)
+V.Local.iID.Declare(Long)
+V.Local.iID.Set(1)
+V.Local.sPartC1.Declare(String)
+V.Local.sPartC2.Declare(String)
+V.Local.iCodeChk.Declare(Long)
+V.Local.iCodeChk2.Declare(Long)
+V.Local.iCodeChk.Set(0)
+
+F.odbc.Connection!conx0.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+F.Intrinsic.String.Concat("DELETE FROM GAB_3156_PRT_CERTLBHS WHERE TERMINAL='",V.Caller.Terminal,"'",V.Local.sSql)
+F.ODBC.Connection!conx0.Execute(V.Local.sSql)
+F.ODBC.Connection!conx0.Close
+
+F.ODBC.Connection!conx.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+'------------------------ Search on V_BI_PACKING_LIST View for Order and Suffix------------------------------------------------------------------------
+F.Intrinsic.String.Concat("Select PART, LOCN from V_BI_PACKING_LIST Where ORDER_NO='",V.Global.sOrder,"' AND ORDER_SUFFIX='",V.Global.sOrderSuffix,"'",V.Local.sSQL)
+F.ODBC.Connection!conx.OpenRecordsetRO("rstShipLn",V.Local.sSQL)
+F.Intrinsic.Control.DoUntil(V.ODBC.conx!rstShipLn.EOF,=,"True")
+	V.Local.sPart.Set(V.ODBC.conx!rstShipLn.FieldVal!PART)
+	F.Intrinsic.String.Trim(V.Local.sPart,V.Local.sPart)
+	V.Local.sLocation.Set(V.ODBC.conx!rstShipLn.FieldVal!LOCN)
+'------------------------ Search on ORDER_HIST_LOT View for Order and Suffix------------------------------------------------------------------------
+	F.ODBC.Connection!conx2.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+	F.Intrinsic.String.Concat("Select LOT,BIN,FILL_BIN,HEAT,SERIAL from ORDER_HIST_LOT Where ORDER_NO='",V.Global.sOrder,"' AND ORDER_SUFFIX='",V.Global.sOrderSuffix,"'",V.Local.sSQL)
+	F.ODBC.Connection!conx2.OpenRecordsetRO("rstOrdHistLot",V.Local.sSQL)
+	F.Intrinsic.Control.If(V.ODBC.conx2!rstOrdHistLot.EOF,=,"TRUE")
+		F.Intrinsic.Control.End
+	F.Intrinsic.Control.EndIf
+	V.Local.sLot.Set(V.ODBC.conx2!rstOrdHistLot.FieldVal!LOT)
+	V.Local.sBin.Set(V.ODBC.conx2!rstOrdHistLot.FieldVal!BIN)
+	F.Intrinsic.String.Concat(V.Local.sBin,V.ODBC.conx2!rstOrdHistLot.FieldVal!FILL_BIN,V.Local.sBin)
+	V.Local.sHeat.Set(V.ODBC.conx2!rstOrdHistLot.FieldVal!HEAT)
+	V.Local.sSerial.Set(V.ODBC.conx2!rstOrdHistLot.FieldVal!SERIAL)
+	F.ODBC.conx2!rstOrdHistLot.Close
+	F.ODBC.Connection!conx2.Close
+'------------------------ Search on V_ITEM_HISTORY View for Part, Location, Lot, Bin, Heat, Serial------------------------------------------------------------------------
+	F.ODBC.Connection!conx2.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+	F.Intrinsic.String.Concat("Select CODE_TRANSACTION,JOB,SUFFIX,SEQUENCE from V_ITEM_HISTORY Where PART='",V.Local.sPart,"' AND LOCATION='",V.Local.sLocation,"'",V.Local.sSQL)
+	F.Intrinsic.String.Concat(V.Local.sSQL," AND LOT='",V.Local.sLot,"' AND BIN='",V.Local.sBin,"' AND HEAT='",V.Local.sHEAT,"' AND SERIAL_NUMBER='",V.Local.sSerial,"'",V.Local.sSQL)
+	F.Intrinsic.String.Concat(V.Local.sSQL," AND (CODE_TRANSACTION='J52' OR CODE_TRANSACTION='J55' OR CODE_TRANSACTION='S52' OR CODE_TRANSACTION='C52' OR CODE_TRANSACTION='R10' OR CODE_TRANSACTION='R11')",V.Local.sSQL)
+	F.ODBC.Connection!conx2.OpenRecordsetRO("rstItmHis",V.Local.sSQL)
+	F.Intrinsic.Control.If(V.ODBC.conx2!rstItmHis.EOF,=,"FALSE")
+		F.Intrinsic.Control.DoUntil(V.ODBC.conx2!rstItmHis.EOF,=,"TRUE")
+			F.odbc.Connection!conx3.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+			F.Intrinsic.String.Concat("SELECT * FROM GAB_3156_PRT_CERTLBHS WHERE TERMINAL='",V.Caller.Terminal,"'",V.Local.sSql)
+			F.ODBC.Connection!conx3.OpenRecordsetRW("rstPrtTemp",V.Local.sSQL)
+			F.ODBC.conx3!rstPrtTemp.AddNew
+			F.ODBC.conx3!rstPrtTemp.Set!Terminal(V.Caller.Terminal)
+			F.ODBC.conx3!rstPrtTemp.Set!ID(V.Local.iID)
+			F.ODBC.conx3!rstPrtTemp.Set!PART(V.Local.sPart)
+			F.ODBC.conx3!rstPrtTemp.Set!LOCATION(V.Local.sLocation)
+			F.ODBC.conx3!rstPrtTemp.Set!LOT(V.Local.sLot)
+			F.ODBC.conx3!rstPrtTemp.Set!BIN(V.Local.sBin)
+			F.ODBC.conx3!rstPrtTemp.Set!HEAT(V.Local.sHeat)
+			F.ODBC.conx3!rstPrtTemp.Set!SERIAL(V.Local.sSerial)
+			F.ODBC.conx3!rstPrtTemp.Set!JOB(V.ODBC.conx2!rstItmHis.FieldVal!JOB)
+			F.ODBC.conx3!rstPrtTemp.Set!SUFFIX(V.ODBC.conx2!rstItmHis.FieldVal!SUFFIX)
+			F.ODBC.conx3!rstPrtTemp.Set!CODE_TRANSACTION(V.ODBC.conx2!rstItmHis.FieldVal!CODE_TRANSACTION)
+			F.ODBC.conx3!rstPrtTemp.Set!SEQUENCE(V.ODBC.conx2!rstItmHis.FieldVal!SEQUENCE)
+			F.ODBC.conx3!rstPrtTemp.Set!CHK("N")
+			F.ODBC.conx3!rstPrtTemp.Update
+			F.Intrinsic.Math.Add(V.Local.iID,1,V.Local.iID)
+			F.ODBC.Connection!conx3.Close
+			F.ODBC.conx2!rstItmHis.MoveNext
+		F.Intrinsic.Control.Loop
+	F.Intrinsic.Control.EndIf
+	F.ODBC.conx2!rstItmHis.Close
+	F.ODBC.Connection!conx2.Close
+
+
+'----------------------- Search on GAB_PRT_CERTLBHS ----
+
+		F.ODBC.Connection!conx2.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+	F.Intrinsic.Control.Do
+'		F.ODBC.Connection!conx2.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+
+		F.Intrinsic.String.Concat("Select * FROM GAB_3156_PRT_CERTLBHS WHERE CHK='N' AND TERMINAL='",V.Caller.Terminal,"'",V.Local.sSQL)
+		F.ODBC.Connection!conx2.OpenRecordsetRO("rstItmHisLoop",V.Local.sSQL)
+		F.Intrinsic.Control.If(V.ODBC.conx2!rstItmHisLoop.EOF,=,True)
+			F.Intrinsic.Control.ExitDo
+		F.Intrinsic.Control.EndIf
+
+		'----------------------- Check status of the Line used --------
+
+		F.ODBC.Connection!conx6.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+		F.Intrinsic.String.Concat("SELECT * FROM GAB_3156_PRT_CERTLBHS WHERE TERMINAL='",V.Caller.Terminal,"' AND ID='",V.ODBC.conx2!rstItmHisLoop.FieldVal!ID,"'",V.Local.sSql)
+		F.ODBC.Connection!conx6.OpenRecordsetRW("rstupdID",V.Local.sSQL)
+		F.ODBC.conx6!rstupdID.Set!CHK("Y")
+		F.ODBC.conx6!rstupdID.Update
+		F.ODBC.conx6!rstupdID.Close
+		F.ODBC.Connection!conx6.Close
+	
+		F.Intrinsic.Control.If(V.ODBC.conx2!rstItmHisLoop.FieldVal!SEQUENCE,>=,990000)
+			F.Intrinsic.Control.If(V.ODBC.conx2!rstItmHisLoop.FieldVal!CODE_TRANSACTION,=,"J52")
+				V.Local.iCodeChk.Set(1)
+			F.Intrinsic.Control.EndIf
+			F.Intrinsic.Control.If(V.ODBC.conx2!rstItmHisLoop.FieldVal!CODE_TRANSACTION,=,"S52")
+				V.Local.iCodeChk.Set(1)
+			F.Intrinsic.Control.EndIf
+			F.Intrinsic.Control.If(V.ODBC.conx2!rstItmHisLoop.FieldVal!CODE_TRANSACTION,=,"C52")
+				V.Local.iCodeChk.Set(1)
+			F.Intrinsic.Control.EndIf
+
+
+			F.Intrinsic.Control.If(V.Local.iCodeChk,=,1)
+				F.ODBC.Connection!conx3.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+				F.Intrinsic.String.Concat("Select * FROM V_ITEM_HISTORY WHERE JOB='",V.ODBC.conx2!rstItmHisLoop.FieldVal!JOB,"' AND SUFFIX='",V.ODBC.conx2!rstItmHisLoop.FieldVal!SUFFIX,"'",V.Local.sSQL2)
+				F.Intrinsic.String.Concat(V.Local.sSQL2," AND (CODE_TRANSACTION='J52' OR CODE_TRANSACTION='J55' OR CODE_TRANSACTION='S52' OR CODE_TRANSACTION='C52' OR CODE_TRANSACTION='R11' OR CODE_TRANSACTION='R11')",V.Local.sSQL2)
+				F.ODBC.Connection!conx3.OpenRecordsetRO("rstPrtTjobs",V.Local.sSQL2)
+				F.Intrinsic.Control.If(V.ODBC.conx3!rstPrtTjobs.EOF,=,"FALSE")
+					F.Intrinsic.Control.DoUntil(V.ODBC.conx3!rstPrtTjobs.EOF,=,"TRUE")
+						F.Intrinsic.String.Concat("Select * FROM GAB_3156_PRT_CERTLBHS WHERE TERMINAL='",V.Caller.Terminal,"' AND PART='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!PART,"' AND LOCATION='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!LOCATION,"'",V.Local.sSQL2)
+						F.Intrinsic.String.Concat(V.Local.sSQL2," AND LOT='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!LOT,"' AND BIN='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!BIN,"' AND HEAT='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!HEAT,"'",V.Local.sSQL2)
+						F.Intrinsic.String.Concat(V.Local.sSQL2," AND SERIAL='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!SERIAL_NUMBER,"' AND SEQUENCE='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!SEQUENCE,"'",V.Local.sSQL2)
+						F.Intrinsic.String.Concat(V.Local.sSQL2," AND JOB='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!JOB,"' AND SUFFIX='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!SUFFIX,"'",V.Local.sSQL2)
+						F.ODBC.Connection!conx4.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+						F.ODBC.Connection!conx4.OpenRecordsetRO("rstchk",V.Local.sSQL2)
+						F.Intrinsic.Control.If(V.ODBC.conx4!rstchk.BOF,=,"TRUE")
+							F.ODBC.Connection!conx5.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+							F.Intrinsic.String.Concat("SELECT * FROM GAB_3156_PRT_CERTLBHS WHERE TERMINAL='",V.Caller.Terminal,"'",V.Local.sSql)
+							F.ODBC.Connection!conx5.OpenRecordsetRW("rstPrtTTjobs",V.Local.sSQL)
+							F.ODBC.conx5!rstPrtTTjobs.AddNew
+							F.ODBC.conx5!rstPrtTTjobs.Set!Terminal(V.Caller.Terminal)
+							F.ODBC.conx5!rstPrtTTjobs.Set!ID(V.Local.iID)
+							F.ODBC.conx5!rstPrtTTjobs.Set!PART(V.ODBC.conx3!rstPrtTjobs.FieldVal!PART)
+							F.ODBC.conx5!rstPrtTTjobs.Set!LOCATION(V.ODBC.conx3!rstPrtTjobs.FieldVal!LOCATION)
+							F.ODBC.conx5!rstPrtTTjobs.Set!LOT(V.ODBC.conx3!rstPrtTjobs.FieldVal!LOT)
+							F.ODBC.conx5!rstPrtTTjobs.Set!BIN(V.ODBC.conx3!rstPrtTjobs.FieldVal!BIN)
+							F.ODBC.conx5!rstPrtTTjobs.Set!HEAT(V.ODBC.conx3!rstPrtTjobs.FieldVal!HEAT)
+							F.ODBC.conx5!rstPrtTTjobs.Set!SERIAL(V.ODBC.conx3!rstPrtTjobs.FieldVal!SERIAL_NUMBER)
+							F.ODBC.conx5!rstPrtTTjobs.Set!JOB(V.ODBC.conx3!rstPrtTjobs.FieldVal!JOB)
+							F.ODBC.conx5!rstPrtTTjobs.Set!SUFFIX(V.ODBC.conx3!rstPrtTjobs.FieldVal!SUFFIX)
+							F.ODBC.conx5!rstPrtTTjobs.Set!CODE_TRANSACTION(V.ODBC.conx3!rstPrtTjobs.FieldVal!CODE_TRANSACTION)
+							F.ODBC.conx5!rstPrtTTjobs.Set!SEQUENCE(V.ODBC.conx3!rstPrtTjobs.FieldVal!SEQUENCE)
+							F.ODBC.conx5!rstPrtTTjobs.Set!CHK("N")
+							F.Intrinsic.Math.Add(V.Local.iID,1,V.Local.iID)
+							F.ODBC.conx5!rstPrtTTjobs.Update
+							F.ODBC.Connection!conx5.Close
+						F.Intrinsic.Control.EndIf
+						F.ODBC.Connection!conx4.Close
+						F.ODBC.conx3!rstPrtTjobs.MoveNext
+					F.Intrinsic.Control.Loop
+				F.Intrinsic.Control.EndIf
+				F.ODBC.conx3!rstPrtTjobs.Close
+				F.ODBC.Connection!conx3.Close
+			F.Intrinsic.Control.EndIf
+
+'-----------------------------------------------------------------------------------------------------------------------------
+			V.Local.iCodeChk2.Set(0)
+			F.Intrinsic.Control.If(V.ODBC.conx2!rstItmHisLoop.FieldVal!CODE_TRANSACTION,=,"J55")
+				V.Local.iCodeChk2.Set(1)
+			F.Intrinsic.Control.EndIf
+			F.Intrinsic.Control.If(V.ODBC.conx2!rstItmHisLoop.FieldVal!CODE_TRANSACTION,=,"R10")
+				V.Local.iCodeChk2.Set(1)
+			F.Intrinsic.Control.EndIf
+			F.Intrinsic.Control.If(V.ODBC.conx2!rstItmHisLoop.FieldVal!CODE_TRANSACTION,=,"R11")
+				V.Local.iCodeChk2.Set(1)
+			F.Intrinsic.Control.EndIf
+			F.Intrinsic.Control.If(V.Local.iCodeChk2,=,1)
+				F.ODBC.Connection!conx3.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+				F.Intrinsic.String.Concat("Select * FROM V_ITEM_HISTORY WHERE PART='",V.ODBC.conx2!rstItmHisLoop.FieldValRTrim!PART,"' AND LOCATION='",V.ODBC.conx2!rstItmHisLoop.FieldValRTrim!LOCATION,"'",V.Local.sSQL2)
+				F.Intrinsic.String.Concat(V.Local.sSQL2," AND LOT='",V.ODBC.conx2!rstItmHisLoop.FieldValRTrim!LOT,"' AND BIN='",V.ODBC.conx2!rstItmHisLoop.FieldValRTrim!BIN,"'",V.Local.sSQL2)
+				F.Intrinsic.String.Concat(V.Local.sSQL2," AND HEAT='",V.ODBC.conx2!rstItmHisLoop.FieldValRTrim!HEAT,"' AND SERIAL_NUMBER='",V.ODBC.conx2!rstItmHisLoop.FieldValRTrim!SERIAL,"'",V.Local.sSQL2)
+				F.ODBC.Connection!conx3.OpenRecordsetRO("rstPrtTjobs",V.Local.sSQL2)
+				F.Intrinsic.Control.If(V.ODBC.conx3!rstPrtTjobs.EOF,=,"FALSE")
+					F.Intrinsic.Control.DoUntil(V.ODBC.conx3!rstPrtTjobs.EOF,=,"TRUE")
+						F.Intrinsic.String.Concat("Select * FROM GAB_3156_PRT_CERTLBHS WHERE TERMINAL='",V.Caller.Terminal,"' AND PART='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!PART,"' AND LOCATION='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!LOCATION,"'",V.Local.sSQL2)
+						F.Intrinsic.String.Concat(V.Local.sSQL2," AND LOT='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!LOT,"' AND BIN='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!BIN,"' AND HEAT='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!HEAT,"'",V.Local.sSQL2)
+						F.Intrinsic.String.Concat(V.Local.sSQL2," AND SERIAL='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!SERIAL_NUMBER,"' AND SEQUENCE='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!SEQUENCE,"'",V.Local.sSQL2)
+						F.Intrinsic.String.Concat(V.Local.sSQL2," AND JOB='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!JOB,"' AND SUFFIX='",V.ODBC.conx3!rstPrtTjobs.FieldValRTrim!SUFFIX,"'",V.Local.sSQL2)
+						F.ODBC.Connection!conx4.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+						F.ODBC.Connection!conx4.OpenRecordsetRO("rstchk",V.Local.sSQL2)
+						F.Intrinsic.Control.If(V.ODBC.conx4!rstchk.BOF,=,"TRUE")
+							F.ODBC.Connection!conx5.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+							F.Intrinsic.String.Concat("SELECT * FROM GAB_3156_PRT_CERTLBHS WHERE TERMINAL='",V.Caller.Terminal,"'",V.Local.sSql)
+							F.ODBC.Connection!conx5.OpenRecordsetRW("rstPrtTTjobs",V.Local.sSQL)
+							F.ODBC.conx5!rstPrtTTjobs.AddNew
+							F.ODBC.conx5!rstPrtTTjobs.Set!Terminal(V.Caller.Terminal)
+							F.ODBC.conx5!rstPrtTTjobs.Set!ID(V.Local.iID)
+							F.ODBC.conx5!rstPrtTTjobs.Set!PART(V.ODBC.conx3!rstPrtTjobs.FieldVal!PART)
+							F.ODBC.conx5!rstPrtTTjobs.Set!LOCATION(V.ODBC.conx3!rstPrtTjobs.FieldVal!LOCATION)
+							F.ODBC.conx5!rstPrtTTjobs.Set!LOT(V.ODBC.conx3!rstPrtTjobs.FieldVal!LOT)
+							F.ODBC.conx5!rstPrtTTjobs.Set!BIN(V.ODBC.conx3!rstPrtTjobs.FieldVal!BIN)
+							F.ODBC.conx5!rstPrtTTjobs.Set!HEAT(V.ODBC.conx3!rstPrtTjobs.FieldVal!HEAT)
+							F.ODBC.conx5!rstPrtTTjobs.Set!SERIAL(V.ODBC.conx3!rstPrtTjobs.FieldVal!SERIAL_NUMBER)
+							F.ODBC.conx5!rstPrtTTjobs.Set!JOB(V.ODBC.conx3!rstPrtTjobs.FieldVal!JOB)
+							F.ODBC.conx5!rstPrtTTjobs.Set!SUFFIX(V.ODBC.conx3!rstPrtTjobs.FieldVal!SUFFIX)
+							F.ODBC.conx5!rstPrtTTjobs.Set!CODE_TRANSACTION(V.ODBC.conx3!rstPrtTjobs.FieldVal!CODE_TRANSACTION)
+							F.ODBC.conx5!rstPrtTTjobs.Set!SEQUENCE(V.ODBC.conx3!rstPrtTjobs.FieldVal!SEQUENCE)
+							F.ODBC.conx5!rstPrtTTjobs.Set!CHK("N")
+							F.Intrinsic.Math.Add(V.Local.iID,1,V.Local.iID)
+							F.ODBC.conx5!rstPrtTTjobs.Update
+							F.ODBC.Connection!conx5.Close
+						F.Intrinsic.Control.EndIf
+						F.ODBC.Connection!conx4.Close
+						F.ODBC.conx3!rstPrtTjobs.MoveNext
+					F.Intrinsic.Control.Loop
+				F.Intrinsic.Control.EndIf
+				F.ODBC.conx3!rstPrtTjobs.Close
+				F.ODBC.Connection!conx3.Close
+			F.Intrinsic.Control.EndIf
+'--------------------------------------------------------------------------------------------------------------------------
+
+		F.Intrinsic.Control.EndIf
+		F.ODBC.conx2!rstItmHisLoop.Close
+'		F.ODBC.Connection!conx2.Close
+	F.Intrinsic.Control.Loop
+		F.ODBC.Connection!conx2.Close
+
+	F.ODBC.conx!rstShipLn.MoveNext
+F.Intrinsic.Control.Loop
+F.ODBC.conx!rstShipLn.Close
+F.ODBC.Connection!conx.Close
+
+F.Intrinsic.Control.CallSub(Prtcert2imp)
+
+
+
+
+
+Program.Sub.PrtCert2PL.End
+
+Program.Sub.PrtCert2prtSel.Start
+Gui.F_PrtCertPrt..MousePointer(11)
+Gui.F_PrtCertPrt.cmdPrtYes.Enabled(false)
+Gui.F_PrtCertPrt.cmdPrtNo.Enabled(false)
+
+F.Intrinsic.Control.If(V.Global.sSrchPL,=,1)
+	F.Intrinsic.Control.CallSub(Prtcert2pl)
+F.Intrinsic.Control.Else
+	F.Intrinsic.Control.CallSub(Prtcert2)
+F.Intrinsic.Control.EndIf
+
+Program.Sub.PrtCert2prtSel.End
+
+
